@@ -1,0 +1,7 @@
+README.md
+setup.py
+dx_contest.egg-info/PKG-INFO
+dx_contest.egg-info/SOURCES.txt
+dx_contest.egg-info/dependency_links.txt
+dx_contest.egg-info/requires.txt
+dx_contest.egg-info/top_level.txt
