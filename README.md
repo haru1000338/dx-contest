@@ -39,7 +39,7 @@ frontend/
     stamprally.js
 ```
 
-## セットアップ手順
+## 実行手順
 
 ### バックエンド
 
@@ -60,6 +60,7 @@ frontend/
    ```bash
    python -m backend.app
    ```
+   http://localhost:5000 でアクセス
 
 ### フロントエンド
 
@@ -67,15 +68,16 @@ frontend/
 
    ```bash
    cd frontend
-   npm install
+   npm install　#frontend/node_modulesが無かったら
    ```
 
 2. 開発サーバーを起動します。
    ```bash
    npm run dev
    ```
+   http://localhost:3000 でアクセス
 
-## テスト
+## テスト(未実装)
 
 ### バックエンドのテスト
 
@@ -104,6 +106,8 @@ npx cypress open
 - React
 - Next.js
 
-## ライセンス
 
-このプロジェクトは MIT ライセンスの下で提供されています。
+
+
+
+

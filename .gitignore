@@ -4,3 +4,28 @@ __pycache__/
 
 .next
 node_modules
+
+# Python関連
+.env
+instance/
+*.db
+*.sqlite3
+*.egg-info/
+dist/
+build/
+*.log
+
+# Node.js/Next.js関連
+.env.local
+.env.development
+.env.production
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+out/
+.DS_Store
+
+# Cypress関連
+cypress/videos/
+cypress/screenshots/
