@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { login } from '../lib/api';
+import { useState } from "react";
+import { login } from "../lib/api";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [userId, setUserId] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -13,14 +13,121 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">ログイン</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="ユーザー名" className="border p-2 w-full" />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="パスワード" className="border p-2 w-full" />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">ログイン</button>
-      </form>
-      {userId && <p className="mt-4 text-green-600">ログイン成功: ユーザーID {userId}</p>}
+    <div
+      style={{
+        minHeight: "100vh",
+        margin: 0,
+        padding: 0,
+        backgroundColor: "orange",
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: "25%",
+          left: 0,
+          width: "100%",
+          textAlign: "center",
+          fontSize: "2rem",
+          fontWeight: "bold",
+          letterSpacing: "0.1em",
+          transform: "translateY(-50%)",
+        }}
+      >
+        アプリ名
+      </div>
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            width: "90vw",
+            maxWidth: "400px",
+            padding: "6vw 4vw",
+            background: "white",
+            borderRadius: "4vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            margin: 0,
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              textAlign: "center",
+            }}
+          >
+            ログイン
+          </h1>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="メールアドレス"
+              style={{
+                border: "1px solid #ccc",
+                padding: "2vw",
+                width: "80%",
+                fontSize: "1rem",
+                boxSizing: "border-box",
+                borderRadius: "1vw",
+              }}
+            />
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="パスワード"
+              style={{
+                border: "1px solid #ccc",
+                padding: "2vw",
+                width: "80%",
+                fontSize: "1rem",
+                boxSizing: "border-box",
+                borderRadius: "1vw",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#2563eb",
+                color: "white",
+                padding: "8px 16px",
+                borderRadius: "6px",
+                textAlign: "center",
+                border: "none",
+              }}
+            >
+              ログイン
+            </button>
+          </form>
+          {userId && (
+            <p style={{ marginTop: "1rem", color: "green" }}>
+              ログイン成功: ユーザーID {userId}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
