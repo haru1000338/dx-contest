@@ -8,6 +8,7 @@
   "dependencies": {
     "next": "^15.3.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-qr-barcode-scanner": "^2.1.7"
   }
 }

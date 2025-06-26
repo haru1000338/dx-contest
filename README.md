@@ -12,6 +12,9 @@ backend/
   app/
     __init__.py
     models/
+      spot.py
+      stamp.py
+      user.py
     routes/
       auth.py
       spot.py
@@ -105,9 +108,3 @@ npx cypress open
 - JavaScript
 - React
 - Next.js
-
-
-
-
-
-

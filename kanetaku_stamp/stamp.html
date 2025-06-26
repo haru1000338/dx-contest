@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自転車観光スタンプラリー</title>
+    <link rel="stylesheet" href="stamp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>自転車観光スタンプラリー</h1>
+
+        <div id="mapArea" class="section hidden">
+            <h2>マップ</h2>
+            <p>現在の場所とスタンプポイントを表示します。地図をここに埋め込むことができます。</p>
+            <div class="map-placeholder">
+                <p>🗺️ 地図のプレースホルダー</p>
+                <p>(今回は地図サービスの実装はしていません)</p>
+            </div>
+        </div>
+
+        <div id="cameraArea" class="section hidden">
+            <h2>スタンプをゲット！</h2>
+            <p>観光地に到着したら、以下のボタンをタップしてQRコードをスキャンしましょう。</p>
+            <button id="getStampButton">QRコードをスキャンする</button>
+        </div>
+
+        <div id="qrScanArea" class="section hidden">
+            <h2>QRコードをスキャン中...</h2>
+            <p>観光地に設置されたQRコードをカメラにかざしてください。</p>
+            <div id="reader" style="width: 100%; max-width: 300px; margin: 0 auto;"></div>
+            <button id="cancelScanButton">キャンセル</button>
+        </div>
+
+        <div id="stampResultArea" class="section hidden">
+            <div class="stamp-animation">
+                <img id="acquiredStampImage" src="https://via.placeholder.com/150x150?text=Stamp" alt="獲得したスタンプ" class="acquired-stamp-img">
+                <p id="acquisitionMessage">🎉 スタンプを獲得しました！</p>
+            </div>
+            <h2 id="stampLocationName">目的地名</h2>
+            <p id="stampDescription">獲得したスタンプの説明文が入ります。</p>
+
+            <div class="button-group">
+                <button id="viewStampsButtonFromAcquired">スタンプ帳を見る</button>
+                <button id="backToCameraFromAcquired">スキャン画面に戻る</button>
+            </div>
+        </div>
+
+        <div id="stampBookArea" class="section hidden">
+            <div class="header-with-back">
+                <button id="backToMainButton" class="back-button hidden">← 戻る</button> 
+                <h2>マイスタンプ帳</h2>
+            </div>
+            <p class="progress-text">
+                <span id="stampsCollectedCount">0</span> / <span id="stampsTotalCount">0</span> 個のスタンプをゲット！
+            </p>
+            <div id="stampGrid" class="stamp-grid">
+                </div>
+        </div>
+
+        <div id="couponArea" class="section hidden">
+            <h2>クーポン</h2>
+            <p>獲得したクーポンがここに表示されます。スタンプを集めてクーポンをゲットしましょう！</p>
+            <div class="coupon-list">
+                <div class="coupon-item">
+                    <img src="https://via.placeholder.com/80x80?text=Coupon1" alt="クーポン1" class="coupon-img">
+                    <h3>カフェ割引クーポン</h3>
+                    <p>対象店舗で10%OFF！</p>
+                    <button class="use-coupon-button">利用する</button>
+                </div>
+                <div class="coupon-item unacquired">
+                    <img src="https://via.placeholder.com/80x80?text=Coupon2" alt="クーポン2" class="coupon-img">
+                    <h3>お土産無料クーポン</h3>
+                    <p>スタンプ5個でアンロック！</p>
+                    <button class="use-coupon-button" disabled>未獲得</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="stampDetailModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" id="closeModalButton">&times;</span>
+            <img id="modalStampImage" src="" alt="スタンプ画像" class="modal-stamp-image">
+            <h3 id="modalStampName"></h3>
+            <p id="modalStampDescription"></p>
+            <p id="modalStampAcquiredDate" class="acquired-date"></p>
+        </div>
+    </div>
+
+    <nav class="footer-nav">
+        <a href="#" class="nav-item active" data-target="mapArea">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>マップ</span>
+        </a>
+        <a href="#" class="nav-item" data-target="cameraArea">
+            <i class="fas fa-camera"></i>
+            <span>カメラ</span>
+        </a>
+        <a href="#" class="nav-item" data-target="stampBookArea">
+            <i class="fas fa-stamp"></i>
+            <span>スタンプ</span>
+        </a>
+        <a href="#" class="nav-item" data-target="couponArea">
+            <i class="fas fa-ticket-alt"></i>
+            <span>クーポン</span>
+        </a>
+    </nav>
+
+    <script src="stamp.js"></script>
+</body>
+</html>
