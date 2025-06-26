@@ -58,7 +58,7 @@ frontend/
 
 3. サーバーを起動します。
    ```bash
-   python -m backend.app
+   python run.app
    ```
    http://localhost:5000 でアクセス
 
