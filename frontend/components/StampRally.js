@@ -295,7 +295,8 @@ export default function StampRally() {
           <div>
             <h2>スタンプをゲット！</h2>
             <p>
-              観光地に到着したら、QRコードをスキャンしてスタンプを獲得できます。<br />
+              観光地に到着したら、QRコードをスキャンしてスタンプを獲得できます。
+              <br />
               ※現在カメラ機能は一時停止中です。
             </p>
             <button
@@ -391,7 +392,47 @@ export default function StampRally() {
         >
           スタンプ
         </a>
+        <a
+          href="#"
+          style={{
+            flex: 1,
+            color: screen === "coupon" ? "#007bff" : "#777",
+            textAlign: "center",
+            fontWeight: screen === "coupon" ? "bold" : "normal",
+            textDecoration: "none",
+            fontSize: "0.8em",
+            padding: "5px 0",
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            setScreen("coupon");
+          }}
+        >
+          クーポン
+        </a>
       </nav>
+      {screen === "coupon" && (
+        <div
+          style={{
+            background: "#f5f5f5",
+            borderRadius: 10,
+            margin: "30px auto 0 auto",
+            padding: "32px 16px 24px 16px",
+            maxWidth: 340,
+            minHeight: 120,
+            textAlign: "center",
+            color: "#888",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <h2 style={{ marginBottom: 16 }}>クーポン</h2>
+          <p>クーポン画面は現在制作中です。</p>
+        </div>
+      )}
       {renderModal()}
     </div>
   );
