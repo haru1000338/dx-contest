@@ -12,6 +12,7 @@ const initialStamps = [
     lng: 139.2436,
     isAcquired: true,
     acquiredDate: "2025/06/27 12:00:00",
+    visitCount: 3,
   },
   {
     id: "mount-takao",
@@ -21,8 +22,9 @@ const initialStamps = [
       "https://placehold.jp/8BC34A/444/150x150.png?text=%E9%AB%98%E5%B0%BE%E5%B1%B1",
     lat: 35.6251,
     lng: 139.243,
-    isAcquired: false,
-    acquiredDate: null,
+    isAcquired: true,
+    acquiredDate: "2025/06/25 10:30:00",
+    visitCount: 2,
   },
   {
     id: "hachioji-yume-art-museum",
@@ -34,6 +36,7 @@ const initialStamps = [
     lng: 139.3382,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "yakuoin",
@@ -45,6 +48,7 @@ const initialStamps = [
     lng: 139.2437,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "fujimori-park",
@@ -56,6 +60,7 @@ const initialStamps = [
     lng: 139.3307,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "southern-sky-tower",
@@ -68,6 +73,7 @@ const initialStamps = [
     lng: 139.3402,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "takao-onsen",
@@ -79,6 +85,7 @@ const initialStamps = [
     lng: 139.2706,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "tokyo-fuji-museum",
@@ -90,6 +97,7 @@ const initialStamps = [
     lng: 139.3162,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "takiyama-castle",
@@ -101,6 +109,7 @@ const initialStamps = [
     lng: 139.3386,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "yuuyake-koyake",
@@ -112,6 +121,7 @@ const initialStamps = [
     lng: 139.1567,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "kitano-tenjin",
@@ -123,6 +133,7 @@ const initialStamps = [
     lng: 139.3532,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "koyasu-shrine",
@@ -134,6 +145,7 @@ const initialStamps = [
     lng: 139.3385,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "asakawa-bunker",
@@ -145,6 +157,7 @@ const initialStamps = [
     lng: 139.3201,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
   {
     id: "takao599museum",
@@ -156,6 +169,7 @@ const initialStamps = [
     lng: 139.2702,
     isAcquired: false,
     acquiredDate: null,
+    visitCount: 0,
   },
 ];
 
@@ -195,20 +209,31 @@ export default function StampRally() {
   const [couponList, setCouponList] = useState(coupons);
   // 検索バー連携用
   const [mapQuery, setMapQuery] = useState("");
+  // 今日行くリスト機能
+  const [todayList, setTodayList] = useState([]);
+  const [activeTab, setActiveTab] = useState("spots");
+
+  // 訪問回数に応じた星を表示する関数
+  const getStarsDisplay = (visitCount) => {
+    if (visitCount === 0) return "";
+    const starCount = Math.min(visitCount, 5); // 最大5つの星まで表示
+    return "★".repeat(starCount) + (visitCount > 5 ? `(${visitCount})` : "");
+  };
 
   // QRコード読み取り時の処理
   const handleScan = (data) => {
     if (data) {
       // QRコードの内容に一致するスタンプを獲得
       const found = stamps.find((s) => data.includes(s.id));
-      if (found && !found.isAcquired) {
+      if (found) {
         setStamps((prev) =>
           prev.map((s) =>
             s.id === found.id
               ? {
                   ...s,
                   isAcquired: true,
-                  acquiredDate: new Date().toLocaleString("ja-JP"),
+                  acquiredDate: s.isAcquired ? s.acquiredDate : new Date().toLocaleString("ja-JP"),
+                  visitCount: s.visitCount + 1,
                 }
               : s
           )
@@ -216,7 +241,8 @@ export default function StampRally() {
         setModal({
           ...found,
           isAcquired: true,
-          acquiredDate: new Date().toLocaleString("ja-JP"),
+          acquiredDate: found.isAcquired ? found.acquiredDate : new Date().toLocaleString("ja-JP"),
+          visitCount: found.visitCount + 1,
         });
       }
       setQrOpen(false);
@@ -224,6 +250,17 @@ export default function StampRally() {
   };
   const handleError = (err) => {
     setQrError("カメラの起動に失敗しました: " + err?.message);
+  };
+
+  // 今日行くリストに追加・削除
+  const addToTodayList = (spot) => {
+    if (!todayList.find((item) => item.id === spot.id)) {
+      setTodayList((prev) => [...prev, spot]);
+    }
+  };
+
+  const removeFromTodayList = (spotId) => {
+    setTodayList((prev) => prev.filter((item) => item.id !== spotId));
   };
 
   // スタンプ帳の描画
@@ -399,7 +436,9 @@ export default function StampRally() {
                 marginBottom: 10,
               }}
             >
-              {modal.name}のスタンプを獲得しました！
+              {modal.visitCount > 1 
+                ? `${modal.name}に${modal.visitCount}回目の訪問です！` 
+                : `${modal.name}のスタンプを獲得しました！`}
             </div>
           )}
           <img
@@ -414,10 +453,23 @@ export default function StampRally() {
               border: "3px solid #007bff",
             }}
           />
-          <h3>{modal.name}</h3>
+          <h3>
+            {modal.name}
+            {modal.visitCount > 0 && (
+              <span style={{ color: "#FFD700", marginLeft: "8px", fontSize: "0.9em" }}>
+                {getStarsDisplay(modal.visitCount)}
+              </span>
+            )}
+          </h3>
           <p>{modal.description}</p>
           <p style={{ fontSize: "0.8em", color: "#888" }}>
-            {modal.acquiredDate ? `獲得日時: ${modal.acquiredDate}` : "未獲得"}
+            {modal.acquiredDate ? `初回訪問: ${modal.acquiredDate}` : "未獲得"}
+            {modal.visitCount > 0 && (
+              <>
+                <br />
+                訪問回数: {modal.visitCount}回
+              </>
+            )}
           </p>
         </div>
       </div>
@@ -504,7 +556,19 @@ export default function StampRally() {
               setQuery={setMapQuery}
             />
           </div>
-          {/* 観光地リストを地図の下に表示 */}
+          <div
+            style={{
+              fontSize: "0.85em",
+              color: "#666",
+              marginBottom: 15,
+              padding: "8px 12px",
+              background: "#f8f9fa",
+              borderRadius: 6,
+            }}
+          >
+            💡 観光地名をクリックすると地図に表示されます。経路検索は利用制限があるため、頻繁な使用はお控えください。
+          </div>
+          {/* タブUI付きの観光地リストと今日行くリスト */}
           <div
             style={{
               background: "#f9f9f9",
@@ -514,42 +578,173 @@ export default function StampRally() {
               boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
             }}
           >
-            <h3
-              style={{
-                fontSize: "1.1em",
-                margin: "0 0 8px 0",
-                color: "#007bff",
-              }}
-            >
-              観光地リスト
-            </h3>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {stamps.map((spot) => (
-                <li
-                  key={spot.id}
-                  style={{
-                    marginBottom: 10,
-                    padding: "7px 0 7px 0",
-                    borderBottom: "1px solid #eee",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setMapQuery(spot.name)}
-                >
-                  <span style={{ fontWeight: "bold", color: "#333" }}>
-                    {spot.name}
-                  </span>
-                  <span
+            {/* タブヘッダー */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+              <button
+                style={{
+                  padding: "8px 16px",
+                  border: "none",
+                  borderRadius: "6px",
+                  background: "#007bff",
+                  color: "#fff",
+                  fontSize: "0.95em",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+                onClick={() => setActiveTab(activeTab === "spots" ? "today" : "spots")}
+              >
+                {activeTab === "spots" 
+                  ? `今日行くリスト (${todayList.length})` 
+                  : "観光地リスト"}
+              </button>
+            </div>
+
+            {/* 観光地リストタブ */}
+            {activeTab === "spots" && (
+              <div>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {stamps.map((spot) => (
+                    <li
+                      key={spot.id}
+                      style={{
+                        marginBottom: 10,
+                        padding: "7px 0 7px 0",
+                        borderBottom: "1px solid #eee",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div
+                        style={{ cursor: "pointer", flex: 1 }}
+                        onClick={() => setMapQuery(spot.name)}
+                      >
+                        <span style={{ fontWeight: "bold", color: "#333" }}>
+                          {spot.name}
+                          {spot.visitCount > 0 && (
+                            <span style={{ color: "#FFD700", marginLeft: "6px" }}>
+                              {getStarsDisplay(spot.visitCount)}
+                            </span>
+                          )}
+                        </span>
+                        <br />
+                        <span
+                          style={{
+                            fontSize: "0.85em",
+                            color: "#666",
+                          }}
+                        >
+                          {spot.description}
+                        </span>
+                      </div>
+                      <button
+                        style={{
+                          background: todayList.find(
+                            (item) => item.id === spot.id
+                          )
+                            ? "#28a745"
+                            : "#007bff",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: 4,
+                          padding: "4px 8px",
+                          fontSize: "0.8em",
+                          cursor: "pointer",
+                          marginLeft: 8,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (todayList.find((item) => item.id === spot.id)) {
+                            removeFromTodayList(spot.id);
+                          } else {
+                            addToTodayList(spot);
+                          }
+                        }}
+                      >
+                        {todayList.find((item) => item.id === spot.id)
+                          ? "追加済み"
+                          : "追加"}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* 今日行くリストタブ */}
+            {activeTab === "today" && (
+              <div>
+                {todayList.length === 0 ? (
+                  <p
                     style={{
-                      fontSize: "0.93em",
-                      color: "#666",
-                      marginLeft: 6,
+                      textAlign: "center",
+                      color: "#888",
+                      margin: "20px 0",
                     }}
                   >
-                    {spot.description}
-                  </span>
-                </li>
-              ))}
-            </ul>
+                    今日行く観光地を追加してください
+                  </p>
+                ) : (
+                  <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                    {todayList.map((spot) => (
+                      <li
+                        key={spot.id}
+                        style={{
+                          marginBottom: 10,
+                          padding: "7px 0 7px 0",
+                          borderBottom: "1px solid #eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div
+                          style={{ cursor: "pointer", flex: 1 }}
+                          onClick={() => setMapQuery(spot.name)}
+                        >
+                          <span style={{ fontWeight: "bold", color: "#333" }}>
+                            {spot.name}
+                            {spot.visitCount > 0 && (
+                              <span style={{ color: "#FFD700", marginLeft: "6px" }}>
+                                {getStarsDisplay(spot.visitCount)}
+                              </span>
+                            )}
+                          </span>
+                          <br />
+                          <span
+                            style={{
+                              fontSize: "0.85em",
+                              color: "#666",
+                            }}
+                          >
+                            {spot.description}
+                          </span>
+                        </div>
+                        <button
+                          style={{
+                            background: "#dc3545",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 4,
+                            padding: "4px 8px",
+                            fontSize: "0.8em",
+                            cursor: "pointer",
+                            marginLeft: 8,
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeFromTodayList(spot.id);
+                          }}
+                        >
+                          削除
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
