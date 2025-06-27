@@ -57,6 +57,106 @@ const initialStamps = [
     isAcquired: false,
     acquiredDate: null,
   },
+  {
+    id: "southern-sky-tower",
+    name: "サザンスカイタワー八王子",
+    description:
+      "八王子駅南口直結の高層複合施設。展望やショッピングも楽しめる。",
+    imageUrl:
+      "https://placehold.jp/FF6347/444/150x150.png?text=%E3%82%B5%E3%82%B6%E3%83%B3%E3%82%B9%E3%82%AB%E3%82%A4%E3%82%BF%E3%83%AF%E3%83%BC",
+    lat: 35.6506,
+    lng: 139.3402,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "takao-onsen",
+    name: "高尾山口温泉",
+    description: "高尾山口駅すぐの天然温泉。登山帰りにおすすめ。",
+    imageUrl:
+      "https://placehold.jp/FFA07A/444/150x150.png?text=%E9%AB%98%E5%B0%BE%E5%B1%B1%E5%8F%A3%E6%B8%A9%E6%B3%89",
+    lat: 35.6242,
+    lng: 139.2706,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "tokyo-fuji-museum",
+    name: "東京富士美術館",
+    description: "国内外の名画や企画展が楽しめる美術館。",
+    imageUrl:
+      "https://placehold.jp/87CEEB/444/150x150.png?text=%E6%9D%B1%E4%BA%AC%E5%AF%8C%E5%A3%AB%E7%BE%8E%E8%A1%93%E9%A4%A8",
+    lat: 35.6681,
+    lng: 139.3162,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "takiyama-castle",
+    name: "滝山城跡",
+    description: "戦国時代の山城跡。春は桜の名所。",
+    imageUrl:
+      "https://placehold.jp/DA70D6/444/150x150.png?text=%E6%BB%9D%E5%B1%B1%E5%9F%8E%E8%B7%A1",
+    lat: 35.6931,
+    lng: 139.3386,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "yuuyake-koyake",
+    name: "夕やけ小やけふれあいの里",
+    description: "自然や動物とふれあえる体験型施設。家族連れに人気。",
+    imageUrl:
+      "https://placehold.jp/FFDAB9/444/150x150.png?text=%E5%A4%95%E3%82%84%E3%81%91%E5%B0%8F%E3%82%84%E3%81%91",
+    lat: 35.6689,
+    lng: 139.1567,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "kitano-tenjin",
+    name: "北野天神社",
+    description: "学問の神様を祀る歴史ある神社。受験生に人気。",
+    imageUrl:
+      "https://placehold.jp/FFE4B5/444/150x150.png?text=%E5%8C%97%E9%87%8E%E5%A4%A9%E7%A5%9E%E7%A4%BE",
+    lat: 35.6562,
+    lng: 139.3532,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "koyasu-shrine",
+    name: "子安神社",
+    description: "安産祈願で有名な八王子最古の神社。",
+    imageUrl:
+      "https://placehold.jp/FFE4E1/444/150x150.png?text=%E5%AD%90%E5%AE%89%E7%A5%9E%E7%A4%BE",
+    lat: 35.6567,
+    lng: 139.3385,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "asakawa-bunker",
+    name: "浅川地下壕跡",
+    description: "戦時中の地下壕跡。歴史を学べる貴重なスポット。",
+    imageUrl:
+      "https://placehold.jp/708090/fff/150x150.png?text=%E6%B5%85%E5%B7%9D%E5%9C%B0%E4%B8%8B%E5%A3%95",
+    lat: 35.6502,
+    lng: 139.3201,
+    isAcquired: false,
+    acquiredDate: null,
+  },
+  {
+    id: "takao599museum",
+    name: "高尾599ミュージアム",
+    description: "高尾山の自然や生態系を学べる体験型ミュージアム。",
+    imageUrl:
+      "https://placehold.jp/98FB98/444/150x150.png?text=%E9%AB%98%E5%B0%BE599%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B8%E3%82%A2%E3%83%A0",
+    lat: 35.6247,
+    lng: 139.2702,
+    isAcquired: false,
+    acquiredDate: null,
+  },
 ];
 
 const coupons = [
@@ -127,62 +227,123 @@ export default function StampRally() {
   };
 
   // スタンプ帳の描画
-  const renderStampBook = () => (
-    <div style={{ padding: 20 }}>
-      <h2 style={{ textAlign: "center" }}>マイスタンプ帳</h2>
-      <p style={{ textAlign: "center", fontWeight: "bold" }}>
-        {stamps.filter((s) => s.isAcquired).length} / {stamps.length}{" "}
-        個のスタンプをゲット！
-      </p>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))",
-          gap: 15,
-        }}
-      >
-        {stamps.map((stamp) => (
-          <div
-            key={stamp.id}
+  const renderStampBook = () => {
+    const acquiredCount = stamps.filter((s) => s.isAcquired).length;
+    const couponThreshold = 5;
+    const canIssueCoupon =
+      acquiredCount > 0 && acquiredCount % couponThreshold === 0;
+    // 既に発行済みの「スタンプ達成クーポン」の数
+    const issuedCount = couponList.filter((c) =>
+      c.id.startsWith("stamp-coupon-")
+    ).length;
+    // 次に発行できる達成クーポン番号
+    const nextCouponNum = issuedCount + 1;
+
+    const handleIssueCoupon = () => {
+      const newCoupon = {
+        id: `stamp-coupon-${nextCouponNum}`,
+        title: `スタンプ${acquiredCount}個達成クーポン`,
+        description: `スタンプ${acquiredCount}個達成記念！特別クーポンです。`,
+        expires: "2025-12-31",
+        used: false,
+      };
+      setCouponList((prev) => [...prev, newCoupon]);
+    };
+
+    return (
+      <div style={{ padding: 20 }}>
+        <h2 style={{ textAlign: "center" }}>マイスタンプ帳</h2>
+        <p style={{ textAlign: "center", fontWeight: "bold" }}>
+          {acquiredCount} / {stamps.length} 個のスタンプをゲット！
+        </p>
+        {/* クーポン発行ボタン */}
+        <div style={{ textAlign: "center", margin: "18px 0 10px 0" }}>
+          <button
             style={{
-              background: stamp.isAcquired ? "#fff" : "#f0f0f0",
+              background: canIssueCoupon ? "#007bff" : "#ccc",
+              color: "#fff",
+              border: "none",
               borderRadius: 8,
-              padding: 10,
-              boxShadow: stamp.isAcquired
-                ? "0 2px 5px rgba(0,0,0,0.08)"
-                : "inset 0 1px 3px rgba(0,0,0,0.1)",
-              opacity: stamp.isAcquired ? 1 : 0.6,
-              filter: stamp.isAcquired ? "none" : "grayscale(100%)",
-              cursor: stamp.isAcquired ? "pointer" : "default",
-              textAlign: "center",
+              padding: "10px 28px",
+              fontWeight: "bold",
+              fontSize: "1.1em",
+              boxShadow: canIssueCoupon
+                ? "0 2px 8px rgba(0,123,255,0.08)"
+                : "none",
+              cursor: canIssueCoupon ? "pointer" : "not-allowed",
+              opacity: canIssueCoupon ? 1 : 0.6,
+              marginBottom: 8,
+              transition: "background 0.2s",
             }}
-            onClick={() => stamp.isAcquired && setModal(stamp)}
+            disabled={!canIssueCoupon}
+            onClick={canIssueCoupon ? handleIssueCoupon : undefined}
           >
-            <img
-              src={stamp.imageUrl}
-              alt={stamp.name}
+            {canIssueCoupon
+              ? `クーポンを発行する（${acquiredCount}個達成）`
+              : `5個ごとにクーポン発行！`}
+          </button>
+          {canIssueCoupon && (
+            <div
               style={{
-                width: 70,
-                height: 70,
-                borderRadius: "50%",
-                objectFit: "cover",
-                marginBottom: 8,
-                border: "2px solid #ddd",
-              }}
-            />
-            <p
-              style={{
-                fontWeight: "bold",
-                color: stamp.isAcquired ? "#444" : "#888",
+                color: "#007bff",
+                fontSize: "0.97em",
+                marginTop: 4,
               }}
             >
-              {stamp.isAcquired ? stamp.name : "？"}
-            </p>
-          </div>
-        ))}
+              スタンプ{acquiredCount}個達成！クーポンを発行できます
+            </div>
+          )}
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))",
+            gap: 15,
+          }}
+        >
+          {stamps.map((stamp) => (
+            <div
+              key={stamp.id}
+              style={{
+                background: stamp.isAcquired ? "#fff" : "#f0f0f0",
+                borderRadius: 8,
+                padding: 10,
+                boxShadow: stamp.isAcquired
+                  ? "0 2px 5px rgba(0,0,0,0.08)"
+                  : "inset 0 1px 3px rgba(0,0,0,0.1)",
+                opacity: stamp.isAcquired ? 1 : 0.6,
+                filter: stamp.isAcquired ? "none" : "grayscale(100%)",
+                cursor: stamp.isAcquired ? "pointer" : "default",
+                textAlign: "center",
+              }}
+              onClick={() => stamp.isAcquired && setModal(stamp)}
+            >
+              <img
+                src={stamp.imageUrl}
+                alt={stamp.name}
+                style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  marginBottom: 8,
+                  border: "2px solid #ddd",
+                }}
+              />
+              <p
+                style={{
+                  fontWeight: "bold",
+                  color: stamp.isAcquired ? "#444" : "#888",
+                }}
+              >
+                {stamp.isAcquired ? stamp.name : "？"}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // モーダル
   const renderModal = () =>
