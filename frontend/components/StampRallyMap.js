@@ -6,6 +6,7 @@ import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import RedMarkerIcon from "./RedMarkerIcon";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x.src || markerIcon2x,
@@ -29,10 +30,28 @@ function FlyToSpot({ position }) {
 
 export default function StampRallyMap({ stamps, query, setQuery }) {
   const [selected, setSelected] = useState(null);
+  // 検索は大文字小文字・全角半角を無視して部分一致
+  const normalize = (str) => (str || "").toLowerCase().replace(/\s/g, "");
   const filtered = query
-    ? stamps.filter((s) => s.name.includes(query) || s.id.includes(query))
+    ? stamps.filter(
+        (s) =>
+          normalize(s.name).includes(normalize(query)) ||
+          normalize(s.id).includes(normalize(query))
+      )
     : [];
   const selectedSpot = stamps.find((s) => s.id === selected);
+
+  // 八王子駅の緯度経度
+  const hachiojiStation = { lat: 35.655, lng: 139.3389 };
+  // 検索で八王子駅が選択された場合の特別処理
+  const isHachiojiStation = (query) => {
+    const norm = normalize(query);
+    return (
+      norm.includes("八王子駅") ||
+      norm.includes("hachioji") ||
+      norm.includes("はちおうじえき")
+    );
+  };
 
   // 検索クリア用
   const handleClear = () => {
@@ -40,13 +59,35 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
     setSelected(null);
   };
 
-  useEffect(() => {
-    // 親からqueryが変わったら自動で候補を選択
+  // 親からqueryが変わったら部分一致で自動選択
+  React.useEffect(() => {
     if (query) {
-      const found = stamps.find((s) => s.name === query || s.id === query);
+      const found = stamps.find(
+        (s) =>
+          normalize(s.name) === normalize(query) ||
+          normalize(s.id) === normalize(query) ||
+          normalize(s.name).includes(normalize(query))
+      );
       if (found) setSelected(found.id);
     }
   }, [query, stamps]);
+
+  // Enterキーで候補1件なら選択
+  const handleInputKeyDown = (e) => {
+    if (e.key === "Enter" && filtered.length === 1) {
+      setSelected(filtered[0].id);
+      setQuery("");
+    }
+  };
+
+  // selectedSpot: 観光地が選択されていればその座標、八王子駅が選択されていればnull
+  let routingTo = null;
+  if (selectedSpot) {
+    routingTo = [selectedSpot.lat, selectedSpot.lng];
+  } else if (query && isHachiojiStation(query)) {
+    // 八王子駅が検索された場合はピンだけ強調（ルートは引かない）
+    routingTo = null;
+  }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
@@ -65,6 +106,7 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleInputKeyDown}
           placeholder="スポット名で検索"
           style={{
             padding: "6px 12px",
@@ -94,7 +136,7 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
         )}
       </div>
       {/* 検索結果リスト */}
-      {query && filtered.length > 0 && (
+      {query && (
         <div
           style={{
             position: "absolute",
@@ -110,23 +152,27 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
             overflowY: "auto",
           }}
         >
-          {filtered.map((s) => (
-            <div
-              key={s.id}
-              style={{
-                padding: "7px 12px",
-                cursor: "pointer",
-                borderBottom: "1px solid #eee",
-                background: selected === s.id ? "#e3f0ff" : undefined,
-              }}
-              onClick={() => {
-                setSelected(s.id);
-                setQuery("");
-              }}
-            >
-              {s.name}
-            </div>
-          ))}
+          {filtered.length === 0 ? (
+            <div style={{ padding: "10px 12px", color: "#888" }}>該当なし</div>
+          ) : (
+            filtered.map((s) => (
+              <div
+                key={s.id}
+                style={{
+                  padding: "7px 12px",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #eee",
+                  background: selected === s.id ? "#e3f0ff" : undefined,
+                }}
+                onClick={() => {
+                  setSelected(s.id);
+                  setQuery("");
+                }}
+              >
+                {s.name}
+              </div>
+            ))
+          )}
         </div>
       )}
       <MapContainer
@@ -139,12 +185,23 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {selectedSpot && (
-          <FlyToSpot position={[selectedSpot.lat, selectedSpot.lng]} />
-        )}
-        {selectedSpot && (
-          <RoutingControl to={[selectedSpot.lat, selectedSpot.lng]} />
-        )}
+        {/* 八王子駅の赤いピン */}
+        <Marker
+          position={[hachiojiStation.lat, hachiojiStation.lng]}
+          icon={RedMarkerIcon}
+        >
+          <Popup>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontWeight: "bold", marginBottom: 4 }}>
+                八王子駅
+              </div>
+              <div style={{ fontSize: "0.95em", marginBottom: 4 }}>
+                八王子市の中心駅・スタート地点
+              </div>
+            </div>
+          </Popup>
+        </Marker>
+        {/* 既存の観光地マーカー */}
         {stamps.map((spot) =>
           spot.lat && spot.lng ? (
             <Marker key={spot.id} position={[spot.lat, spot.lng]}>
@@ -177,6 +234,12 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
               </Popup>
             </Marker>
           ) : null
+        )}
+        {/* 経路描画（観光地が選択されている場合のみ） */}
+        {routingTo && <RoutingControl to={routingTo} />}
+        {/* 選択時に地図移動 */}
+        {selectedSpot && (
+          <FlyToSpot position={[selectedSpot.lat, selectedSpot.lng]} />
         )}
       </MapContainer>
       {/* 観光地リスト（画面中央に固定）を削除 */}
