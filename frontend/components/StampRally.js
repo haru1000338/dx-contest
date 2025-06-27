@@ -72,12 +72,37 @@ const initialStamps = [
   },
 ];
 
+const coupons = [
+  {
+    id: "coupon1",
+    title: "高尾山そば割引クーポン",
+    description: "高尾山周辺のそば屋で使える100円割引クーポンです。",
+    expires: "2025-12-31",
+    used: false,
+  },
+  {
+    id: "coupon2",
+    title: "川越お土産10%OFF",
+    description: "川越一番街のお土産店で10%OFF!",
+    expires: "2025-09-30",
+    used: false,
+  },
+  {
+    id: "coupon3",
+    title: "昭和記念公園 入園料割引",
+    description: "国営昭和記念公園の入園料が200円引き。",
+    expires: "2025-08-31",
+    used: false,
+  },
+];
+
 export default function StampRally() {
   const [screen, setScreen] = useState("map");
   const [stamps, setStamps] = useState(initialStamps);
   const [modal, setModal] = useState(null);
   const [qrOpen, setQrOpen] = useState(false);
   const [qrError, setQrError] = useState("");
+  const [couponList, setCouponList] = useState(coupons);
 
   // QRコード読み取り時の処理
   const handleScan = (data) => {
@@ -417,11 +442,11 @@ export default function StampRally() {
             background: "#f5f5f5",
             borderRadius: 10,
             margin: "30px auto 0 auto",
-            padding: "32px 16px 24px 16px",
-            maxWidth: 340,
+            padding: "24px 8px 16px 8px",
+            maxWidth: 360,
             minHeight: 120,
             textAlign: "center",
-            color: "#888",
+            color: "#444",
             boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
             display: "flex",
             flexDirection: "column",
@@ -430,7 +455,181 @@ export default function StampRally() {
           }}
         >
           <h2 style={{ marginBottom: 16 }}>クーポン</h2>
-          <p>クーポン画面は現在制作中です。</p>
+          {couponList.length === 0 ? (
+            <p style={{ color: "#888" }}>利用可能なクーポンはありません。</p>
+          ) : (
+            <div style={{ width: "100%", maxWidth: 340 }}>
+              {/* 未使用クーポン */}
+              <div style={{ marginBottom: 10 }}>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1em",
+                    color: "#007bff",
+                    marginBottom: 6,
+                    textAlign: "left",
+                  }}
+                >
+                  未使用クーポン
+                </div>
+                {couponList.filter((c) => !c.used).length === 0 ? (
+                  <div
+                    style={{
+                      color: "#aaa",
+                      fontSize: "0.95em",
+                      marginBottom: 12,
+                    }}
+                  >
+                    未使用のクーポンはありません。
+                  </div>
+                ) : (
+                  couponList
+                    .filter((c) => !c.used)
+                    .map((c) => (
+                      <div
+                        key={c.id}
+                        style={{
+                          background: "#fff",
+                          borderRadius: 8,
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                          marginBottom: 14,
+                          padding: "16px 12px 12px 12px",
+                          textAlign: "left",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "1.05em",
+                            marginBottom: 6,
+                          }}
+                        >
+                          {c.title}
+                        </div>
+                        <div style={{ fontSize: "0.95em", marginBottom: 8 }}>
+                          {c.description}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.85em",
+                            color: "#888",
+                            marginBottom: 8,
+                          }}
+                        >
+                          有効期限: {c.expires}
+                        </div>
+                        <button
+                          style={{
+                            background: "#007bff",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 5,
+                            padding: "7px 18px",
+                            fontWeight: "bold",
+                            fontSize: "0.97em",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            setCouponList((prev) =>
+                              prev.map((item) =>
+                                item.id === c.id
+                                  ? { ...item, used: true }
+                                  : item
+                              )
+                            );
+                            alert("クーポンを利用しました！（ダミー動作）");
+                          }}
+                        >
+                          利用する
+                        </button>
+                      </div>
+                    ))
+                )}
+              </div>
+              {/* 区切り線 */}
+              <hr
+                style={{
+                  border: 0,
+                  borderTop: "1px dashed #bbb",
+                  margin: "18px 0 10px 0",
+                }}
+              />
+              {/* 使用済みクーポン */}
+              <div>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1em",
+                    color: "#888",
+                    marginBottom: 6,
+                    textAlign: "left",
+                  }}
+                >
+                  使用済みクーポン
+                </div>
+                {couponList.filter((c) => c.used).length === 0 ? (
+                  <div style={{ color: "#aaa", fontSize: "0.95em" }}>
+                    使用済みのクーポンはありません。
+                  </div>
+                ) : (
+                  couponList
+                    .filter((c) => c.used)
+                    .map((c) => (
+                      <div
+                        key={c.id}
+                        style={{
+                          background: "#f3f3f3",
+                          borderRadius: 8,
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+                          marginBottom: 14,
+                          padding: "16px 12px 12px 12px",
+                          textAlign: "left",
+                          opacity: 0.7,
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "1.05em",
+                            marginBottom: 6,
+                          }}
+                        >
+                          {c.title}
+                        </div>
+                        <div style={{ fontSize: "0.95em", marginBottom: 8 }}>
+                          {c.description}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "0.85em",
+                            color: "#888",
+                            marginBottom: 8,
+                          }}
+                        >
+                          有効期限: {c.expires}
+                        </div>
+                        <button
+                          style={{
+                            background: "#ccc",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 5,
+                            padding: "7px 18px",
+                            fontWeight: "bold",
+                            fontSize: "0.97em",
+                            cursor: "not-allowed",
+                            opacity: 0.7,
+                          }}
+                          disabled
+                        >
+                          利用済み
+                        </button>
+                      </div>
+                    ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
       {renderModal()}
