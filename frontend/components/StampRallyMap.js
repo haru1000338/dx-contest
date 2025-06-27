@@ -301,13 +301,14 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
       <div
         style={{
           position: "absolute",
-          top: 10,
+          top: 0, // 上部の余白をなくす
           right: 10,
           left: 60, // 拡大縮小ボタンのスペースを確保
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
           gap: 8,
+          padding: "10px", // 内部パディングで調整
         }}
       >
         {/* 検索ボックス */}
@@ -513,7 +514,7 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
         <div
           style={{
             position: "absolute",
-            bottom: 20,
+            bottom: shouldShowSearchResults ? 220 : 20, // 検索結果リストがある場合は上に配置
             left: 10,
             right: 10,
             background: "#fff3cd",
@@ -537,17 +538,10 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
         <div
           style={{
             position: "absolute",
-            top:
-              fromSpot && toSpot && fromSpot !== toSpot
-                ? isRouteMinimized
-                  ? 80
-                  : 140
-                : selectedSpot && !toSpot
-                ? 120
-                : 44,
+            bottom: 20, // 画面下部から固定距離に配置
             right: 10,
             left: 60, // 拡大縮小ボタンのスペースを確保
-            zIndex: 1000,
+            zIndex: 1001, // 他の要素より上に表示
             background: "#fff",
             border: "1px solid #bbb",
             borderRadius: 6,
