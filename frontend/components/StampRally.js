@@ -6,7 +6,7 @@ const initialStamps = [
     name: "八王子城跡",
     description: "戦国時代の山城の遺地。関東有数の規模を誇ります。",
     imageUrl:
-      "https://via.placeholder.com/150x150/FFD700/FFFFFF?text=HachiojiCastle",
+      "https://placehold.jp/FFD700/444/150x150.png?text=%E5%85%AB%E7%8E%8B%E5%AD%90%E5%9F%8E%E8%B7%A1",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -14,7 +14,8 @@ const initialStamps = [
     id: "mount-takao",
     name: "高尾山",
     description: "都心から手軽に行ける自然豊かな山。ミシュラン三つ星評価。",
-    imageUrl: "https://via.placeholder.com/150x150/8BC34A/FFFFFF?text=MtTakao",
+    imageUrl:
+      "https://placehold.jp/8BC34A/444/150x150.png?text=%E9%AB%98%E5%B0%BE%E5%B1%B1",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -23,7 +24,7 @@ const initialStamps = [
     name: "武蔵一宮 氷川神社",
     description: "2000年以上の歴史を持つとされる由緒ある神社です。",
     imageUrl:
-      "https://via.placeholder.com/150x150/FF6347/FFFFFF?text=HikawaJinja",
+      "https://placehold.jp/FF6347/444/150x150.png?text=%E6%B0%B7%E5%B7%9D%E7%A5%9E%E7%A4%BE",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -31,7 +32,8 @@ const initialStamps = [
     id: "kawagoe-warehouse",
     name: "川越一番街",
     description: "蔵造りの町並みが美しい「小江戸」として知られています。",
-    imageUrl: "https://via.placeholder.com/150x150/87CEEB/FFFFFF?text=Kawagoe",
+    imageUrl:
+      "https://placehold.jp/87CEEB/444/150x150.png?text=%E5%B7%9D%E8%B6%8A%E4%B8%80%E7%95%AA%E8%A1%97",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -40,7 +42,7 @@ const initialStamps = [
     name: "奥多摩湖",
     description: "多摩川をせき止めて作られた人造湖。美しい景観が広がります。",
     imageUrl:
-      "https://via.placeholder.com/150x150/6A5ACD/FFFFFF?text=OkutamaLake",
+      "https://placehold.jp/6A5ACD/fff/150x150.png?text=%E5%A5%A5%E5%A4%9A%E6%91%A9%E6%B9%96",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -49,7 +51,7 @@ const initialStamps = [
     name: "国営昭和記念公園",
     description: "広大な敷地を持つ都内有数の公園。四季折々の花が楽しめます。",
     imageUrl:
-      "https://via.placeholder.com/150x150/FFB6C1/FFFFFF?text=ShowaPark",
+      "https://placehold.jp/FFB6C1/444/150x150.png?text=%E6%98%AD%E5%92%8C%E5%85%AC%E5%9C%92",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -57,7 +59,8 @@ const initialStamps = [
     id: "chofu-jindaiji",
     name: "深大寺",
     description: "東京都内で2番目に古いお寺。そばが名物です。",
-    imageUrl: "https://via.placeholder.com/150x150/FFDAB9/FFFFFF?text=Jindaiji",
+    imageUrl:
+      "https://placehold.jp/FFDAB9/444/150x150.png?text=%E6%B7%B1%E5%A4%A7%E5%AF%BA",
     isAcquired: false,
     acquiredDate: null,
   },
@@ -66,7 +69,7 @@ const initialStamps = [
     name: "大國魂神社",
     description: "武蔵国の総社。歴史あるお祭りでも有名です。",
     imageUrl:
-      "https://via.placeholder.com/150x150/DA70D6/FFFFFF?text=OkunitamaJinja",
+      "https://placehold.jp/DA70D6/444/150x150.png?text=%E5%A4%A7%E5%9C%8B%E9%AD%82%E7%A5%9E%E7%A4%BE",
     isAcquired: false,
     acquiredDate: null,
   },
