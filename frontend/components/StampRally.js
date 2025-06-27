@@ -476,12 +476,12 @@ export default function StampRally() {
       {screen === "coupon" && (
         <div
           style={{
-            background: "#f5f5f5",
+            background: "#fff", // グレーから白に
             borderRadius: 10,
-            margin: "30px auto 0 auto",
-            padding: "24px 8px 16px 8px",
+            margin: "0 auto 0 auto", // 上余白も0に
+            padding: "10px 4px 8px 4px", // paddingもさらに詰める
             maxWidth: 360,
-            minHeight: 120,
+            minHeight: 80,
             textAlign: "center",
             color: "#444",
             boxShadow: "0 2px 8px rgba(0,0,0,0.04)",

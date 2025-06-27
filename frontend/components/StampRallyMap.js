@@ -182,11 +182,11 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
       {/* 観光地リスト（地図下） */}
       <div
         style={{
-          marginTop: 12,
+          marginTop: 0, // ←スペースをなくす
           background: "#fff",
           borderRadius: 8,
           boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-          padding: "10px 8px",
+          padding: "10px 8px 6px 8px", // ←下も少し詰める
           maxWidth: 400,
           width: "100%",
           textAlign: "center",
