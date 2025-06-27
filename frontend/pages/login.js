@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { login } from "../lib/api";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [userId, setUserId] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await login(username, password);
-    setUserId(res.user_id);
+    router.push("/stamprally");
   };
 
   return (
