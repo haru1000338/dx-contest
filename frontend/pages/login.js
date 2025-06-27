@@ -20,37 +20,47 @@ export default function LoginPage() {
         margin: 0,
         padding: 0,
         backgroundColor: "orange",
-        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center", // 画面の中心に配置
+        maxWidth: 430, // iPhone12Proの画面幅
+        minWidth: 0,
+        width: "100vw",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
+      {/* アプリ名を白い枠の上部と画面の上部の間に配置 */}
       <div
         style={{
-          position: "absolute",
-          top: "25%",
-          left: 0,
           width: "100%",
           textAlign: "center",
           fontSize: "2rem",
           fontWeight: "bold",
           letterSpacing: "0.1em",
-          transform: "translateY(-50%)",
+          padding: "25vw 0 2vw 0",
+          background: "transparent",
+          color: "#333",
         }}
       >
         アプリ名
       </div>
+      {/* フォームを画面の中心に配置 */}
       <div
         style={{
-          minHeight: "100vh",
+          flex: 1,
+          width: "100%",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "center", // ←中央寄せに戻す
         }}
       >
         <div
           style={{
-            width: "95vw",
-            maxWidth: "400px",
-            padding: "8vw 4vw",
+            width: "92vw",
+            maxWidth: 370,
+            padding: "7vw 4vw 4vw 4vw",
             background: "white",
             borderRadius: "6vw",
             display: "flex",
@@ -58,8 +68,9 @@ export default function LoginPage() {
             justifyContent: "center",
             alignItems: "center",
             boxSizing: "border-box",
-            margin: 0,
+            margin: "0 auto",
             boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+            marginTop: 0,
           }}
         >
           <h1

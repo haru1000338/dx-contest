@@ -179,56 +179,8 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
           ) : null
         )}
       </MapContainer>
-      {/* 観光地リスト（地図下） */}
-      <div
-        style={{
-          marginTop: 0, // ←スペースをなくす
-          background: "#fff",
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-          padding: "10px 8px 6px 8px", // ←下も少し詰める
-          maxWidth: 400,
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
-        <div style={{ fontWeight: "bold", marginBottom: 6 }}>
-          観光地リストから選択
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 8,
-            justifyContent: "center",
-          }}
-        >
-          {stamps.map((spot) => (
-            <button
-              key={spot.id}
-              onClick={() => {
-                setSelected(spot.id);
-                setQuery(spot.name);
-              }}
-              style={{
-                background: selected === spot.id ? "#007bff" : "#f0f0f0",
-                color: selected === spot.id ? "#fff" : "#333",
-                border: "1px solid #bbb",
-                borderRadius: 6,
-                padding: "7px 14px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                fontSize: "0.98em",
-                boxShadow:
-                  selected === spot.id ? "0 2px 8px #007bff22" : undefined,
-                transition: "all 0.2s",
-              }}
-            >
-              {spot.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* 観光地リスト（画面中央に固定）を削除 */}
+      {/* この部分を削除し、観光地リストのUIを非表示にします */}
     </div>
   );
 }

@@ -268,7 +268,7 @@ export default function StampRally() {
           padding: 25,
           width: "100%",
           maxWidth: 400,
-          marginTop: 20,
+          marginTop: 0, // ←上余白をなくす
           marginBottom: 90,
           flexGrow: 1,
           overflowY: "auto",
