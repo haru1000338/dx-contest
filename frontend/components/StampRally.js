@@ -10,8 +10,8 @@ const initialStamps = [
       "https://placehold.jp/FFD700/444/150x150.png?text=%E5%85%AB%E7%8E%8B%E5%AD%90%E5%9F%8E%E8%B7%A1",
     lat: 35.6626,
     lng: 139.2436,
-    isAcquired: false,
-    acquiredDate: null,
+    isAcquired: true,
+    acquiredDate: "2025/06/27 12:00:00",
   },
   {
     id: "mount-takao",
@@ -62,22 +62,22 @@ const initialStamps = [
 const coupons = [
   {
     id: "coupon1",
-    title: "高尾山そば割引クーポン",
-    description: "高尾山周辺のそば屋で使える100円割引クーポンです。",
+    title: "テスト用クーポンA",
+    description: "これはテスト用のクーポンです。〇〇円引きです。",
     expires: "2025-12-31",
     used: false,
   },
   {
     id: "coupon2",
-    title: "川越お土産10%OFF",
-    description: "川越一番街のお土産店で10%OFF!",
+    title: "テスト用クーポンB",
+    description: "これはテスト用のクーポンです。△△％割引です。",
     expires: "2025-09-30",
     used: false,
   },
   {
     id: "coupon3",
-    title: "昭和記念公園 入園料割引",
-    description: "国営昭和記念公園の入園料が200円引き。",
+    title: "テスト用クーポンC",
+    description: "これはテスト用のクーポンです。",
     expires: "2025-08-31",
     used: false,
   },
@@ -228,6 +228,19 @@ export default function StampRally() {
           >
             &times;
           </span>
+          {/* スタンプ獲得メッセージ */}
+          {modal.acquiredDate && (
+            <div
+              style={{
+                fontWeight: "bold",
+                color: "#007bff",
+                fontSize: "1.15em",
+                marginBottom: 10,
+              }}
+            >
+              {modal.name}のスタンプを獲得しました！
+            </div>
+          )}
           <img
             src={modal.imageUrl}
             alt={modal.name}
@@ -260,6 +273,7 @@ export default function StampRally() {
         alignItems: "center",
       }}
     >
+      {/* タイトルカード */}
       <div
         style={{
           background: "#fff",
@@ -268,121 +282,406 @@ export default function StampRally() {
           padding: 25,
           width: "100%",
           maxWidth: 400,
-          marginTop: 0, // ←上余白をなくす
-          marginBottom: 90,
-          flexGrow: 1,
-          overflowY: "auto",
+          marginTop: 24,
+          marginBottom: 24,
+          textAlign: "center",
         }}
       >
         <h1
           style={{
-            color: "#333",
-            marginBottom: 25,
-            fontSize: "1.6em",
-            textAlign: "center",
+            color: "#007bff",
+            marginBottom: 10,
+            fontSize: "1.7em",
+            fontWeight: "bold",
+            letterSpacing: "0.04em",
           }}
         >
           自転車観光スタンプラリー
         </h1>
-        {/* 画面切り替え */}
-        {screen === "map" && (
-          <div>
-            <h2>マップ</h2>
-            <div
-              style={{
-                background: "#e9ecef",
-                border: "2px dashed #ced4da",
-                borderRadius: 8,
-                height: 320,
-                marginBottom: 20,
-                overflow: "hidden",
-              }}
-            >
-              <MapWithMarkers
-                stamps={stamps}
-                query={mapQuery}
-                setQuery={setMapQuery}
-              />
-            </div>
-            {/* 観光地リストを地図の下に表示 */}
-            <div
-              style={{
-                background: "#f9f9f9",
-                borderRadius: 8,
-                padding: "12px 10px 8px 10px",
-                marginBottom: 10,
-                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "1.1em",
-                  margin: "0 0 8px 0",
-                  color: "#007bff",
-                }}
-              >
-                観光地リスト
-              </h3>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                {stamps.map((spot) => (
-                  <li
-                    key={spot.id}
-                    style={{
-                      marginBottom: 10,
-                      padding: "7px 0 7px 0",
-                      borderBottom: "1px solid #eee",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setMapQuery(spot.name)}
-                  >
-                    <span style={{ fontWeight: "bold", color: "#333" }}>
-                      {spot.name}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "0.93em",
-                        color: "#666",
-                        marginLeft: 6,
-                      }}
-                    >
-                      {spot.description}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-        {screen === "camera" && (
-          <div>
-            <h2>スタンプをゲット！</h2>
-            <p>
-              観光地に到着したら、QRコードをスキャンしてスタンプを獲得できます。
-              <br />
-              ※現在カメラ機能は一時停止中です。
-            </p>
-            <button
-              style={{
-                background: "#aaa",
-                fontWeight: "bold",
-                fontSize: "1.1em",
-                padding: "12px 25px",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                marginTop: 20,
-                cursor: "not-allowed",
-                opacity: 0.7,
-              }}
-              disabled
-            >
-              カメラ機能は現在ご利用いただけません
-            </button>
-          </div>
-        )}
-        {screen === "stampBook" && renderStampBook()}
-        {/* クーポン画面は省略可 */}
+        <p style={{ color: "#555", fontSize: "1em", margin: 0 }}>
+          八王子市内の観光スポットを巡ってスタンプを集めよう！
+        </p>
       </div>
+      {/* 画面切り替え */}
+      {screen === "map" && (
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+            padding: 25,
+            width: "100%",
+            maxWidth: 400,
+            marginBottom: 24,
+            flexGrow: 1,
+            overflowY: "auto",
+          }}
+        >
+          <h2
+            style={{
+              color: "#007bff",
+              fontWeight: "bold",
+              fontSize: "1.2em",
+              marginBottom: 12,
+            }}
+          >
+            マップ
+          </h2>
+          <div
+            style={{
+              background: "#e9ecef",
+              border: "2px dashed #ced4da",
+              borderRadius: 8,
+              height: 320,
+              marginBottom: 20,
+              overflow: "hidden",
+            }}
+          >
+            <MapWithMarkers
+              stamps={stamps}
+              query={mapQuery}
+              setQuery={setMapQuery}
+            />
+          </div>
+          {/* 観光地リストを地図の下に表示 */}
+          <div
+            style={{
+              background: "#f9f9f9",
+              borderRadius: 8,
+              padding: "12px 10px 8px 10px",
+              marginBottom: 10,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.1em",
+                margin: "0 0 8px 0",
+                color: "#007bff",
+              }}
+            >
+              観光地リスト
+            </h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {stamps.map((spot) => (
+                <li
+                  key={spot.id}
+                  style={{
+                    marginBottom: 10,
+                    padding: "7px 0 7px 0",
+                    borderBottom: "1px solid #eee",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setMapQuery(spot.name)}
+                >
+                  <span style={{ fontWeight: "bold", color: "#333" }}>
+                    {spot.name}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.93em",
+                      color: "#666",
+                      marginLeft: 6,
+                    }}
+                  >
+                    {spot.description}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+      {screen === "camera" && (
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+            padding: 25,
+            width: "100%",
+            maxWidth: 400,
+            marginBottom: 24,
+            flexGrow: 1,
+            overflowY: "auto",
+            textAlign: "center",
+          }}
+        >
+          <h2
+            style={{
+              color: "#007bff",
+              fontWeight: "bold",
+              fontSize: "1.2em",
+              marginBottom: 12,
+            }}
+          >
+            スタンプをゲット！
+          </h2>
+          <p>
+            観光地に到着したら、QRコードをスキャンしてスタンプを獲得できます。
+            <br />
+            ※現在カメラ機能は一時停止中です。
+          </p>
+          <button
+            style={{
+              background: "#aaa",
+              fontWeight: "bold",
+              fontSize: "1.1em",
+              padding: "12px 25px",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              marginTop: 20,
+              cursor: "not-allowed",
+              opacity: 0.7,
+            }}
+            disabled
+          >
+            カメラ機能は現在ご利用いただけません
+          </button>
+        </div>
+      )}
+      {screen === "stampBook" && (
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+            padding: 25,
+            width: "100%",
+            maxWidth: 400,
+            marginBottom: 24,
+            flexGrow: 1,
+            overflowY: "auto",
+          }}
+        >
+          {renderStampBook()}
+        </div>
+      )}
+      {screen === "coupon" && (
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            margin: "0 auto 24px auto",
+            padding: "18px 10px 12px 10px",
+            maxWidth: 400,
+            minHeight: 80,
+            textAlign: "center",
+            color: "#444",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <h2
+            style={{
+              marginBottom: 18,
+              color: "#007bff",
+              fontWeight: "bold",
+              fontSize: "1.3em",
+            }}
+          >
+            クーポン
+          </h2>
+          {couponList.length === 0 ? (
+            <p style={{ color: "#888" }}>利用可能なクーポンはありません。</p>
+          ) : (
+            <div style={{ width: "100%", maxWidth: 360 }}>
+              {/* 未使用クーポン */}
+              <div style={{ marginBottom: 12 }}>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1.05em",
+                    color: "#007bff",
+                    marginBottom: 8,
+                    textAlign: "left",
+                  }}
+                >
+                  未使用クーポン
+                </div>
+                {couponList.filter((c) => !c.used).length === 0 ? (
+                  <div
+                    style={{
+                      color: "#aaa",
+                      fontSize: "0.97em",
+                      marginBottom: 12,
+                    }}
+                  >
+                    未使用のクーポンはありません。
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr",
+                      gap: 14,
+                    }}
+                  >
+                    {couponList
+                      .filter((c) => !c.used)
+                      .map((c) => (
+                        <div
+                          key={c.id}
+                          style={{
+                            background: "#f8fbff",
+                            borderRadius: 10,
+                            boxShadow: "0 2px 8px rgba(0,123,255,0.07)",
+                            padding: "16px 12px 12px 12px",
+                            textAlign: "left",
+                            marginBottom: 0,
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "1.08em",
+                              marginBottom: 6,
+                              color: "#007bff",
+                            }}
+                          >
+                            {c.title}
+                          </div>
+                          <div style={{ fontSize: "0.97em", marginBottom: 8 }}>
+                            {c.description}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "0.89em",
+                              color: "#888",
+                              marginBottom: 8,
+                            }}
+                          >
+                            有効期限: {c.expires}
+                          </div>
+                          <button
+                            style={{
+                              background: "#007bff",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: 6,
+                              padding: "8px 22px",
+                              fontWeight: "bold",
+                              fontSize: "1em",
+                              cursor: "pointer",
+                              boxShadow: "0 1px 4px rgba(0,123,255,0.08)",
+                            }}
+                            onClick={() => {
+                              setCouponList((prev) =>
+                                prev.map((item) =>
+                                  item.id === c.id
+                                    ? { ...item, used: true }
+                                    : item
+                                )
+                              );
+                              alert("クーポンを利用しました！（ダミー動作）");
+                            }}
+                          >
+                            利用する
+                          </button>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+              {/* 区切り線 */}
+              <hr
+                style={{
+                  border: 0,
+                  borderTop: "1px dashed #bbb",
+                  margin: "18px 0 10px 0",
+                }}
+              />
+              {/* 使用済みクーポン */}
+              <div>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "1.05em",
+                    color: "#888",
+                    marginBottom: 8,
+                    textAlign: "left",
+                  }}
+                >
+                  使用済みクーポン
+                </div>
+                {couponList.filter((c) => c.used).length === 0 ? (
+                  <div style={{ color: "#aaa", fontSize: "0.97em" }}>
+                    使用済みのクーポンはありません。
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr",
+                      gap: 14,
+                    }}
+                  >
+                    {couponList
+                      .filter((c) => c.used)
+                      .map((c) => (
+                        <div
+                          key={c.id}
+                          style={{
+                            background: "#f3f3f3",
+                            borderRadius: 10,
+                            boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+                            padding: "16px 12px 12px 12px",
+                            textAlign: "left",
+                            opacity: 0.7,
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "1.08em",
+                              marginBottom: 6,
+                              color: "#888",
+                            }}
+                          >
+                            {c.title}
+                          </div>
+                          <div style={{ fontSize: "0.97em", marginBottom: 8 }}>
+                            {c.description}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "0.89em",
+                              color: "#888",
+                              marginBottom: 8,
+                            }}
+                          >
+                            有効期限: {c.expires}
+                          </div>
+                          <button
+                            style={{
+                              background: "#ccc",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: 6,
+                              padding: "8px 22px",
+                              fontWeight: "bold",
+                              fontSize: "1em",
+                              cursor: "not-allowed",
+                              opacity: 0.7,
+                            }}
+                            disabled
+                          >
+                            利用済み
+                          </button>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {renderModal()}
       {/* フッターナビ */}
       <nav
         style={{
@@ -473,203 +772,6 @@ export default function StampRally() {
           クーポン
         </a>
       </nav>
-      {screen === "coupon" && (
-        <div
-          style={{
-            background: "#fff", // グレーから白に
-            borderRadius: 10,
-            margin: "0 auto 0 auto", // 上余白も0に
-            padding: "10px 4px 8px 4px", // paddingもさらに詰める
-            maxWidth: 360,
-            minHeight: 80,
-            textAlign: "center",
-            color: "#444",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <h2 style={{ marginBottom: 16 }}>クーポン</h2>
-          {couponList.length === 0 ? (
-            <p style={{ color: "#888" }}>利用可能なクーポンはありません。</p>
-          ) : (
-            <div style={{ width: "100%", maxWidth: 340 }}>
-              {/* 未使用クーポン */}
-              <div style={{ marginBottom: 10 }}>
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "1em",
-                    color: "#007bff",
-                    marginBottom: 6,
-                    textAlign: "left",
-                  }}
-                >
-                  未使用クーポン
-                </div>
-                {couponList.filter((c) => !c.used).length === 0 ? (
-                  <div
-                    style={{
-                      color: "#aaa",
-                      fontSize: "0.95em",
-                      marginBottom: 12,
-                    }}
-                  >
-                    未使用のクーポンはありません。
-                  </div>
-                ) : (
-                  couponList
-                    .filter((c) => !c.used)
-                    .map((c) => (
-                      <div
-                        key={c.id}
-                        style={{
-                          background: "#fff",
-                          borderRadius: 8,
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                          marginBottom: 14,
-                          padding: "16px 12px 12px 12px",
-                          textAlign: "left",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "1.05em",
-                            marginBottom: 6,
-                          }}
-                        >
-                          {c.title}
-                        </div>
-                        <div style={{ fontSize: "0.95em", marginBottom: 8 }}>
-                          {c.description}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.85em",
-                            color: "#888",
-                            marginBottom: 8,
-                          }}
-                        >
-                          有効期限: {c.expires}
-                        </div>
-                        <button
-                          style={{
-                            background: "#007bff",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: 5,
-                            padding: "7px 18px",
-                            fontWeight: "bold",
-                            fontSize: "0.97em",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            setCouponList((prev) =>
-                              prev.map((item) =>
-                                item.id === c.id
-                                  ? { ...item, used: true }
-                                  : item
-                              )
-                            );
-                            alert("クーポンを利用しました！（ダミー動作）");
-                          }}
-                        >
-                          利用する
-                        </button>
-                      </div>
-                    ))
-                )}
-              </div>
-              {/* 区切り線 */}
-              <hr
-                style={{
-                  border: 0,
-                  borderTop: "1px dashed #bbb",
-                  margin: "18px 0 10px 0",
-                }}
-              />
-              {/* 使用済みクーポン */}
-              <div>
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "1em",
-                    color: "#888",
-                    marginBottom: 6,
-                    textAlign: "left",
-                  }}
-                >
-                  使用済みクーポン
-                </div>
-                {couponList.filter((c) => c.used).length === 0 ? (
-                  <div style={{ color: "#aaa", fontSize: "0.95em" }}>
-                    使用済みのクーポンはありません。
-                  </div>
-                ) : (
-                  couponList
-                    .filter((c) => c.used)
-                    .map((c) => (
-                      <div
-                        key={c.id}
-                        style={{
-                          background: "#f3f3f3",
-                          borderRadius: 8,
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-                          marginBottom: 14,
-                          padding: "16px 12px 12px 12px",
-                          textAlign: "left",
-                          opacity: 0.7,
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "1.05em",
-                            marginBottom: 6,
-                          }}
-                        >
-                          {c.title}
-                        </div>
-                        <div style={{ fontSize: "0.95em", marginBottom: 8 }}>
-                          {c.description}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.85em",
-                            color: "#888",
-                            marginBottom: 8,
-                          }}
-                        >
-                          有効期限: {c.expires}
-                        </div>
-                        <button
-                          style={{
-                            background: "#ccc",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: 5,
-                            padding: "7px 18px",
-                            fontWeight: "bold",
-                            fontSize: "0.97em",
-                            cursor: "not-allowed",
-                            opacity: 0.7,
-                          }}
-                          disabled
-                        >
-                          利用済み
-                        </button>
-                      </div>
-                    ))
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {renderModal()}
     </div>
   );
 }
