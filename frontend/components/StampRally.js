@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 
 const initialStamps = [
   {
@@ -7,6 +8,8 @@ const initialStamps = [
     description: "戦国時代の山城の遺地。関東有数の規模を誇ります。",
     imageUrl:
       "https://placehold.jp/FFD700/444/150x150.png?text=%E5%85%AB%E7%8E%8B%E5%AD%90%E5%9F%8E%E8%B7%A1",
+    lat: 35.6626,
+    lng: 139.2436,
     isAcquired: false,
     acquiredDate: null,
   },
@@ -16,60 +19,41 @@ const initialStamps = [
     description: "都心から手軽に行ける自然豊かな山。ミシュラン三つ星評価。",
     imageUrl:
       "https://placehold.jp/8BC34A/444/150x150.png?text=%E9%AB%98%E5%B0%BE%E5%B1%B1",
+    lat: 35.6251,
+    lng: 139.243,
     isAcquired: false,
     acquiredDate: null,
   },
   {
-    id: "musashi-ichinomiya",
-    name: "武蔵一宮 氷川神社",
-    description: "2000年以上の歴史を持つとされる由緒ある神社です。",
+    id: "hachioji-yume-art-museum",
+    name: "八王子市夢美術館",
+    description: "多彩な企画展が開催される八王子中心部の美術館。",
     imageUrl:
-      "https://placehold.jp/FF6347/444/150x150.png?text=%E6%B0%B7%E5%B7%9D%E7%A5%9E%E7%A4%BE",
+      "https://placehold.jp/FFB6C1/444/150x150.png?text=%E5%85%AB%E7%8E%8B%E5%AD%90%E5%B8%82%E5%A4%A2%E7%BE%8E%E8%A1%93%E9%A4%A8",
+    lat: 35.6565,
+    lng: 139.3382,
     isAcquired: false,
     acquiredDate: null,
   },
   {
-    id: "kawagoe-warehouse",
-    name: "川越一番街",
-    description: "蔵造りの町並みが美しい「小江戸」として知られています。",
+    id: "yakuoin",
+    name: "高尾山薬王院",
+    description: "高尾山山頂近くの歴史ある寺院。パワースポットとしても有名。",
     imageUrl:
-      "https://placehold.jp/87CEEB/444/150x150.png?text=%E5%B7%9D%E8%B6%8A%E4%B8%80%E7%95%AA%E8%A1%97",
+      "https://placehold.jp/90EE90/444/150x150.png?text=%E8%96%AC%E7%8E%8B%E9%99%A2",
+    lat: 35.6301,
+    lng: 139.2437,
     isAcquired: false,
     acquiredDate: null,
   },
   {
-    id: "lake-okutama",
-    name: "奥多摩湖",
-    description: "多摩川をせき止めて作られた人造湖。美しい景観が広がります。",
+    id: "fujimori-park",
+    name: "富士森公園",
+    description: "桜の名所としても知られる八王子市内の大きな公園。",
     imageUrl:
-      "https://placehold.jp/6A5ACD/fff/150x150.png?text=%E5%A5%A5%E5%A4%9A%E6%91%A9%E6%B9%96",
-    isAcquired: false,
-    acquiredDate: null,
-  },
-  {
-    id: "tachikawa-park",
-    name: "国営昭和記念公園",
-    description: "広大な敷地を持つ都内有数の公園。四季折々の花が楽しめます。",
-    imageUrl:
-      "https://placehold.jp/FFB6C1/444/150x150.png?text=%E6%98%AD%E5%92%8C%E5%85%AC%E5%9C%92",
-    isAcquired: false,
-    acquiredDate: null,
-  },
-  {
-    id: "chofu-jindaiji",
-    name: "深大寺",
-    description: "東京都内で2番目に古いお寺。そばが名物です。",
-    imageUrl:
-      "https://placehold.jp/FFDAB9/444/150x150.png?text=%E6%B7%B1%E5%A4%A7%E5%AF%BA",
-    isAcquired: false,
-    acquiredDate: null,
-  },
-  {
-    id: "fuchu-okunitama",
-    name: "大國魂神社",
-    description: "武蔵国の総社。歴史あるお祭りでも有名です。",
-    imageUrl:
-      "https://placehold.jp/DA70D6/444/150x150.png?text=%E5%A4%A7%E5%9C%8B%E9%AD%82%E7%A5%9E%E7%A4%BE",
+      "https://placehold.jp/ADD8E6/444/150x150.png?text=%E5%AF%8C%E5%A3%AB%E6%A3%AE%E5%85%AC%E5%9C%92",
+    lat: 35.6485,
+    lng: 139.3307,
     isAcquired: false,
     acquiredDate: null,
   },
@@ -99,6 +83,9 @@ const coupons = [
   },
 ];
 
+// 地図部分だけクライアントサイド限定で動的import
+const MapWithMarkers = dynamic(() => import("./StampRallyMap"), { ssr: false });
+
 export default function StampRally() {
   const [screen, setScreen] = useState("map");
   const [stamps, setStamps] = useState(initialStamps);
@@ -106,6 +93,8 @@ export default function StampRally() {
   const [qrOpen, setQrOpen] = useState(false);
   const [qrError, setQrError] = useState("");
   const [couponList, setCouponList] = useState(coupons);
+  // 検索バー連携用
+  const [mapQuery, setMapQuery] = useState("");
 
   // QRコード読み取り時の処理
   const handleScan = (data) => {
@@ -304,18 +293,63 @@ export default function StampRally() {
                 background: "#e9ecef",
                 border: "2px dashed #ced4da",
                 borderRadius: 8,
-                height: 200,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#888",
-                fontSize: "1.1em",
+                height: 320,
                 marginBottom: 20,
+                overflow: "hidden",
               }}
             >
-              <p>🗺️ 地図のプレースホルダー</p>
-              <p>(今回は地図サービスの実装はしていません)</p>
+              <MapWithMarkers
+                stamps={stamps}
+                query={mapQuery}
+                setQuery={setMapQuery}
+              />
+            </div>
+            {/* 観光地リストを地図の下に表示 */}
+            <div
+              style={{
+                background: "#f9f9f9",
+                borderRadius: 8,
+                padding: "12px 10px 8px 10px",
+                marginBottom: 10,
+                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "1.1em",
+                  margin: "0 0 8px 0",
+                  color: "#007bff",
+                }}
+              >
+                観光地リスト
+              </h3>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {stamps.map((spot) => (
+                  <li
+                    key={spot.id}
+                    style={{
+                      marginBottom: 10,
+                      padding: "7px 0 7px 0",
+                      borderBottom: "1px solid #eee",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setMapQuery(spot.name)}
+                  >
+                    <span style={{ fontWeight: "bold", color: "#333" }}>
+                      {spot.name}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.93em",
+                        color: "#666",
+                        marginLeft: 6,
+                      }}
+                    >
+                      {spot.description}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         )}
