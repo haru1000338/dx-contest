@@ -5,7 +5,7 @@ const initialStamps = [
   {
     id: "hachioji-castle",
     name: "八王子城跡",
-    description: "戦国時代の山城の遺地。関東有数の規模を誇ります。",
+    description: "歴史的な価値が高いスポット。",
     imageUrl:
       "https://placehold.jp/FFD700/444/150x150.png?text=%E5%85%AB%E7%8E%8B%E5%AD%90%E5%9F%8E%E8%B7%A1",
     lat: 35.6626,
@@ -17,7 +17,7 @@ const initialStamps = [
   {
     id: "mount-takao",
     name: "高尾山",
-    description: "都心から手軽に行ける自然豊かな山。ミシュラン三つ星評価。",
+    description: "都心から手軽に行ける自然豊かな山。四季折々の景色が楽しめます。",
     imageUrl:
       "https://placehold.jp/8BC34A/444/150x150.png?text=%E9%AB%98%E5%B0%BE%E5%B1%B1",
     lat: 35.6251,

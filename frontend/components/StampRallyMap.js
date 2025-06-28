@@ -183,35 +183,18 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
     setIsRouteMinimized(true); // 経路情報パネルを縮小状態にリセット
   };
 
-  // 経路設定用の関数（自動的に経路検索モードを判定）
+  // 経路設定用の関数（検索バーで観光地を選択した場合は必ず八王子駅からの経路を表示）
   const handleSpotSelect = (spotId, spotName) => {
-    if (!fromSpot || fromSpot === "hachioji-station") {
-      if (spotId === "hachioji-station") {
-        // 八王子駅を選択した場合は単一選択として扱う
-        setSelected(spotId);
-        setFromSpot("hachioji-station");
-        setToSpot(null);
-      } else {
-        // 観光地を選択した場合は経路表示
-        setFromSpot("hachioji-station");
-        setToSpot(spotId);
-        setSelected(null);
-      }
-    } else if (!toSpot && fromSpot !== spotId) {
-      // 2番目の選択：到着地点に設定（同じ場所は除く）
+    if (spotId === "hachioji-station") {
+      // 八王子駅を選択した場合は単一選択として扱う
+      setSelected(spotId);
+      setFromSpot("hachioji-station");
+      setToSpot(null);
+    } else {
+      // 観光地を選択した場合は必ず八王子駅（赤いピン）からの経路を表示
+      setFromSpot("hachioji-station");
       setToSpot(spotId);
       setSelected(null);
-    } else {
-      // 3番目以降または同じ場所：新しい選択として設定
-      if (spotId === "hachioji-station") {
-        setSelected(spotId);
-        setFromSpot("hachioji-station");
-        setToSpot(null);
-      } else {
-        setFromSpot("hachioji-station");
-        setToSpot(spotId);
-        setSelected(null);
-      }
     }
     setQuery("");
   };
@@ -282,13 +265,9 @@ export default function StampRallyMap({ stamps, query, setQuery }) {
     debouncedToSpot &&
     debouncedFromSpot !== debouncedToSpot
   ) {
-    // 2つの地点が選択されている場合：地点間ルート
+    // 2つの地点が選択されている場合：地点間ルート（常に八王子駅から観光地へ）
     routingFrom = getSpotCoordinates(debouncedFromSpot);
     routingTo = getSpotCoordinates(debouncedToSpot);
-  } else if (selectedSpot && !debouncedToSpot) {
-    // 1つの地点のみ選択：八王子駅からのルート
-    routingFrom = [hachiojiStation.lat, hachiojiStation.lng];
-    routingTo = [selectedSpot.lat, selectedSpot.lng];
   }
 
   // ルーティングリクエスト回数の制限チェック
